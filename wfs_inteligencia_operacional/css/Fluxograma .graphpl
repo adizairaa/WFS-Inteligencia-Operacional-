@@ -1,0 +1,18 @@
+wfs_inteligencia_operacional/
+│
+├── src/
+│   ├── gerador_dados.py          # Gera base realista de voos
+│   ├── tempo_bagagem.py          # Cálculo operacional (core)
+│   ├── sla.py                    # Regras e calibração de SLA
+│   ├── risco.py                  # Classificação e score
+│   ├── cenario.py                # AS IS × TO BE
+│   ├── alerta_whatsapp_fake.py   # Alerta fake para demo
+│   └── main.py                   # Orquestrador
+│
+├── dados/
+│   └── voos.csv
+│
+├── outputs/
+│   └── tables/
+│
+└── .venv/

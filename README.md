@@ -1,150 +1,168 @@
-# ✈️ WFS Inteligência Operacional – SLA de Bagagens
+✈️  – Inteligência Operacional de Bagagens
 
-## 📌 Visão Geral
+Este projeto tem como objetivo analisar, simular e comparar cenários operacionais (AS IS × TO BE) no processo de desembarque de bagagens, utilizando análise de dados, regras de SLA e avaliação de risco operacional.
 
-Este projeto foi desenvolvido como **case técnico para a vaga de Trainee da WFS**, com foco em **inteligência operacional aplicada ao SLA de bagagens aeroportuárias**. A solução demonstra como **engenharia de dados, regras de negócio e análise operacional** podem ser integradas para **reduzir riscos operacionais e financeiros**, apoiando a tomada de decisão.
+O foco é apoiar a tomada de decisão por meio de métricas objetivas, simulações e visualizações gráficas, seguindo boas práticas de projetos analíticos aplicados ao contexto aeroportuário.
 
-O projeto simula um ambiente realista de operações aeroportuárias utilizando dados inspirados no **Anuário Estatístico de Tráfego Aéreo 2024**, adotando boas práticas observadas em empresas líderes do setor aéreo.
+🎯 Objetivo do Projeto
 
----
+Simular o tempo de entrega da primeira e última bagagem
 
-## 🎯 Objetivo do Case
+Avaliar o cumprimento de SLA
 
-* Monitorar o **SLA da última bagagem** por voo
-* Classificar voos por **nível de risco operacional**
-* Identificar **turnos críticos**
-* Gerar **alertas preventivos**
-* Produzir dados prontos para consumo em **Power BI**
-* Traduzir risco operacional em **impacto financeiro**
+Classificar o risco operacional
 
----
+Comparar cenários AS IS (atual) × TO BE (otimizado)
 
-## 🧠 Abordagem Analítica
+Visualizar resultados com gráficos comparativos e heatmaps
 
-O projeto segue um fluxo completo de dados:
+Criar base para dashboard interativo (Streamlit)
 
-1. **Geração de dados realistas** (simulação operacional)
-2. **Cálculo de tempos operacionais** de bagagens
-3. **Aplicação dinâmica de SLA** por tipo de voo e horário
-4. **Classificação de risco** (NO_PRAZO | ATENÇÃO | ALTO_RISCO)
-5. **Ajuste de SLA para metas operacionais**
-6. **Alertas automáticos de risco crítico**
-7. **Ranking de turnos mais críticos**
-8. **Visualização analítica (heatmap)**
+🧠 Conceito Analítico
 
----
+O projeto utiliza variáveis operacionais reais, como:
 
-## 🏗️ Arquitetura do Projeto
+Quantidade de bagagens
 
-```
+Equipes disponíveis
+
+Esteiras e veículos
+
+Voos simultâneos
+
+Distância operacional (PERTO / LONGE)
+
+Tempo médio de transporte
+
+A partir desses dados, são calculados:
+
+⏱️ Tempo estimado da primeira bagagem
+
+⏱️ Tempo estimado da última bagagem
+
+📊 SLA (horário alvo)
+
+⚠️ Risco operacional (baixo, médio, alto)
+
+📁 Estrutura do Projeto
 wfs_inteligencia_operacional/
 │
+├── data/
+│   └── base_operacional.csv
+│
 ├── src/
-│   ├── gerador_dados.py        # Geração de base operacional realista
-│   ├── tempo_bagagem.py       # Cálculo de tempos de bagagem (core)
-│   ├── sla.py                 # Regras e calibração dinâmica de SLA
-│   ├── risco.py               # Classificação e score de risco
-│   ├── turnos.py              # Ranking de turnos críticos
-│   ├── alertas.py             # Geração de alertas operacionais
-│   ├── visualizacoes.py       # Visualizações (heatmap)
-│   └── main.py                # Orquestrador do pipeline
+│   ├── tempo_bagagem.py        # Cálculo de tempos estimados
+│   ├── cenario.py              # Simulação AS IS × TO BE
+│   ├── visualizacao.py         # Gráficos e heatmaps
+│   ├── main.py / main1.py      # Execução principal
 │
-├── dados/
-│   └── voos.csv               # Base gerada
+├── app.py                      # Dashboard Streamlit (opcional)
 │
-├── outputs/
-│   └── tables/                # Saídas para Power BI
-│
-├── shell_scripts/
-│   ├── coleta_dados.sh        # Simula ingestão de dados
-│   └── pipeline.sh            # Pipeline automatizado
-│
-└── .venv/                     # Ambiente virtual
-```
+├── requirements.txt
+├── README.md
+└── .gitignore
 
----
+🧮 Lógica de Cálculo (Resumo)
+Capacidade Operacional
+capacidade = equipes × esteiras × veículos
 
-## ⚙️ Pipeline de Dados
+Fatores de Ajuste
 
-O pipeline é automatizado via **Shell Script**, simulando um ambiente corporativo:
+Distância operacional
 
-1. Ativação do ambiente virtual
-2. Coleta e versionamento dos dados CSV
-3. Execução do pipeline Python (`main.py`)
-4. Geração de logs e arquivos analíticos
+Concorrência de voos simultâneos
 
-Essa estrutura reflete práticas de **Data Engineering e DataOps**.
+Tempos Estimados
 
----
+Primeira bagagem ≈ 35% do tempo da última
 
-## 🚦 Classificação de Risco
+Última bagagem baseada na capacidade real
 
-| Nível de Risco | Critério                |
-| -------------- | ----------------------- |
-| NO_PRAZO       | Tempo ≤ SLA             |
-| ATENÇÃO        | SLA < Tempo ≤ SLA × 1.6 |
-| ALTO_RISCO     | Tempo > SLA × 1.6       |
+⚠️ Classificação de Risco
 
-A **zona de ATENÇÃO** é o principal diferencial do projeto, permitindo **gestão proativa**, e não apenas corretiva.
+O risco é definido com base na relação entre:
 
----
+Tempo estimado da última bagagem
 
-## 📊 Outputs Analíticos
+SLA estabelecido
 
-* `alertas_voos_criticos.csv`
-* `ranking_turnos.csv`
-* Base tratada pronta para **Power BI**
-* Heatmap de risco por horário e tipo de voo
+Exemplo conceitual:
 
-Esses dados permitem a construção de dashboards com:
+Situação	Risco
+Dentro do SLA	Baixo
+Até +10 min	Médio
+Acima disso	Alto
+📊 Visualizações
 
-* Risco operacional em tempo quase real
-* Impacto financeiro estimado
-* Priorização de recursos por turno
+O projeto gera:
 
----
+Gráficos comparativos de SLA (AS IS × TO BE)
 
-## 💰 Análise Financeira (Simulada)
+Distribuição de risco operacional
 
-O projeto demonstra como **redução de risco operacional impacta diretamente custos**:
+Heatmap de risco por voo / cenário
 
-* Multa média por SLA quebrado: **R$ 1.500 / voo**
-* Economia potencial anual estimada: **≈ R$ 1,69 milhão**
+Comparação visual de desempenho
 
-📌 Os valores são **fictícios**, porém baseados em práticas de contratos de SLA do setor aéreo.
+Os gráficos são exibidos diretamente na tela (sem fechamento automático).
 
----
+▶️ Como Executar
+1️⃣ Ativar o ambiente virtual
+source .venv/Scripts/activate
 
-## 🛠️ Tecnologias Utilizadas
+2️⃣ Executar o projeto
+python src/main.py
 
-* Python
-* Pandas / NumPy
-* Matplotlib / Seaborn
-* Shell Script
-* Git / GitHub
-* Power BI (consumo dos dados)
 
----
+ou
 
-## 📈 Diferenciais do Projeto
+python src/main1.py
 
-* Pensamento orientado a **negócio e finanças**, não apenas código
-* Pipeline completo de engenharia de dados
-* Simulação realista baseada em dados públicos
-* Pronto para integração com BI corporativo
-* Foco em **prevenção operacional**
+🌐 Dashboard Interativo (Streamlit)
 
----
+O projeto pode ser visualizado como dashboard:
 
-## 👩‍💻 Autora
+streamlit run app.py
 
-**Adila Zairaa**
-Estudante de  Engenharia de Dados | Inteligência Operacional
 
-Projeto desenvolvido para o **processo seletivo de Trainee – WFS**.
+Permite:
 
----
+Seleção de cenário
 
-## 📌 Observação Final
+Visualização interativa de SLA e risco
 
-Este repositório representa uma **prova de conceito**, demonstrando capacidade analítica, técnica e visão estratégica aplicada a operações aeroportuárias.
+Análise exploratória dos dados
+
+🛠️ Tecnologias Utilizadas
+
+Python 3.11
+
+Pandas
+
+NumPy
+
+Matplotlib
+
+Seaborn
+
+Streamlit
+
+Git & GitHub
+
+📌 Contexto Acadêmico e Profissional
+
+Este projeto foi desenvolvido como um case de inteligência operacional, inspirado em práticas reais de empresas do setor aéreo e logístico, com foco em:
+
+Análise de desempenho
+
+Gestão de SLA
+
+Redução de risco operacional
+
+Apoio à decisão estratégica
+
+👤 Autora
+
+Adila Zairaa
+Analista de Dados | Tecnologia | Inteligência Operacional
+GitHub: https://github.com/adizairaa

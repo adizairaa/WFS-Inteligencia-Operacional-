@@ -1,0 +1,19 @@
+wfs_inteligencia_operacional/
+│
+├── src/
+│   ├── visualizacoes.py          #Gera grafico heatmap 
+│   ├── gerador_dados.py          # Gera base realista de voos
+│   ├── tempo_bagagem.py          # Cálculo operacional (core)
+│   ├── sla.py                    # Regras e calibração de SLA
+│   ├── risco.py                  # Classificação e score
+│   ├── turnos.py                 # Hanking de turnos criticos 
+│   ├── alertas.py                # Alerta de voos criticos 
+│   └── main.py                   # Orquestrador
+│
+├── dados/
+│   └── voos.csv
+│
+├── outputs/
+│   └── tables/
+│
+└── .venv/
